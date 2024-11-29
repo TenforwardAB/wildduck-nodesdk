@@ -29,7 +29,7 @@ export class Authentication {
    * Creates an instance of the Authentication class.
    * 
    * @constructor
-   * @param {HttpClient} client - An instance of the HttpClient used to communicate with the API.
+   * @param {ApiClient} client - An instance of the ApiClient used to communicate with the API.
    */
   constructor(client: ApiClient) {
     this.client = client;
