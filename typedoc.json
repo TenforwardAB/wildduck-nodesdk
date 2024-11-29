@@ -1,0 +1,11 @@
+{
+  "entryPoints": ["src/index.ts"],
+  "out": "docs",
+  "exclude": ["**/tests/**", "**/node_modules/**"],
+  "tsconfig": "./tsconfig.json",
+  "name": "WildDuckAPI",
+  "includeVersion": true,
+  "excludeExternals": true,
+  "excludePrivate": true,
+  "theme": "default"
+}

@@ -11,20 +11,22 @@
  *
  * Created on 2024-11-29 :: 12:19 BY joyider <andre(-at-)sess.se>
  */
+import { ApiClient } from "./utils/ApiClient";
+import { Authentication } from "./api/Authentication";
 
 /**
  * A wrapper class for interacting with the WildDuck API.
  * It provides access to various modules, such as Authentication,
  * by utilizing the underlying ApiClient for HTTP communication.
  * 
- * @class WildDuckAPI
+ * @class WildduckNodeSDK
  */
-export class WildDuckAPI {
+export class WildduckNodeSDK {
   private client: ApiClient;
   public authentication: Authentication;
 
   /**
-   * Creates an instance of the WildDuckAPI.
+   * Creates an instance of the Wildduck-NodeSDK.
    * 
    * @constructor
    * @param {string} apiKey - The access token for authenticating API requests.
