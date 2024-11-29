@@ -51,6 +51,22 @@ export class ApiClient {
   }
 
   /**
+   * Makes an HTTP PUT request to the specified endpoint with a JSON payload.
+   *
+   * @async
+   * @function put
+   * @param {string} endpoint - The API endpoint to call (relative to the base URL).
+   * @param {any} body - The JSON payload to send with the request.
+   * @param {Record<string, string>} [headers] - Optional additional headers.
+   * @returns {Promise<any>} - A promise that resolves to the response JSON.
+   *
+   * @throws {Error} - If the HTTP request fails or the response is not successful.
+   */
+  public async put(endpoint: string, body: any, headers: Record<string, string> = {}): Promise<any> {
+    return this.request("PUT", endpoint, body, headers);
+  }
+
+  /**
    * Makes an HTTP POST request to the specified endpoint with a JSON payload.
    * 
    * @async

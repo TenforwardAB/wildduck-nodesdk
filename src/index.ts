@@ -13,6 +13,7 @@
  */
 import { ApiClient } from "./utils/ApiClient";
 import { Authentication } from "./api/Authentication";
+import { Users } from "./api/Users";
 
 /**
  * A wrapper class for interacting with the WildDuck API.
@@ -24,6 +25,7 @@ import { Authentication } from "./api/Authentication";
 export class WildduckNodeSDK {
   private client: ApiClient;
   public authentication: Authentication;
+  public users: Users;
 
   /**
    * Creates an instance of the Wildduck-NodeSDK.
@@ -39,9 +41,17 @@ export class WildduckNodeSDK {
     /**
      * The authentication module for managing authentication-related operations.
      * Provides methods such as `preAuth`, `authenticate`, and more.
-     * 
+     *
      * @type {Authentication}
      */
     this.authentication = new Authentication(this.client);
+
+    /**
+     * The users module for managing user-related operations.
+     * Provides methods such as `listUsers`, `createUser`, `getUser`, `updateUser`, and more.
+     *
+     * @type {Users}
+     */
+    this.users = new Users(this.client);
   }
 }
