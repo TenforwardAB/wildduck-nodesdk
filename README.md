@@ -1,6 +1,5 @@
 # Create a detailed README for the WildDuck-NodeSDK project
 
-readme_content = """
 # WildDuck-NodeSDK
 
 A lightweight and modular client library for interacting with the WildDuck API, designed for Node.js applications. This library simplifies API interactions by providing easy-to-use modules for authentication and other operations, enabling seamless integration into your email infrastructure.
