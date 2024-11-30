@@ -1,9 +1,9 @@
 {
-  "entryPoints": ["src/index.ts"],
+  "entryPoints": ["src/index.ts", "src/api/*.ts"],
   "out": "docs",
   "exclude": ["**/tests/**", "**/node_modules/**"],
   "tsconfig": "./tsconfig.json",
-  "name": "WildDuckAPI",
+  "name": "WildDuck-NodeSDK",
   "includeVersion": true,
   "excludeExternals": true,
   "excludePrivate": true,

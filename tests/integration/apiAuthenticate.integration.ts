@@ -26,8 +26,7 @@ describe("Authentication - Integration Tests", () => {
   let auth: Authentication;
 
   beforeEach(() => {
-    // Skapa klient med riktiga parametrar
-    client = new ApiClient(process.env.API_KEY as string, process.env.API_URL as string);
+    client = new ApiClient(process.env.API_KEY as string, process.env.API_URL as string) //This is acctually more of a e2e test no local test available
     auth = new Authentication(client);
   });
 

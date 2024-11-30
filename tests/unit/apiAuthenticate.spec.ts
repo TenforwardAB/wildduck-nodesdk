@@ -22,13 +22,11 @@ describe("Authentication - Unit Tests", () => {
   let auth: Authentication;
 
   beforeEach(() => {
-    // Mocka ApiClient
     client = new ApiClient("test-api-key", "https://api.example.com");
     auth = new Authentication(client);
   });
 
   it("should successfully authenticate a user", async () => {
-    // Mocka POST-anrop
     jest.spyOn(client, "post").mockResolvedValue({
       success: true,
       id: "123",
@@ -45,7 +43,6 @@ describe("Authentication - Unit Tests", () => {
   });
 
   it("should throw an error if the API returns an error", async () => {
-    // Mocka POST-anrop med fel
     jest.spyOn(client, "post").mockRejectedValue(new Error("Unauthorized"));
 
     await expect(auth.authenticate("testuser", "wrongpassword", "imap")).rejects.toThrow("Unauthorized");

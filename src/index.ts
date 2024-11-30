@@ -16,42 +16,61 @@ import { Authentication } from "./api/Authentication";
 import { Users } from "./api/Users";
 
 /**
- * A wrapper class for interacting with the WildDuck API.
- * It provides access to various modules, such as Authentication,
- * by utilizing the underlying ApiClient for HTTP communication.
- * 
+ * The main SDK class for interacting with the WildDuck API.
+ * This class provides access to various modules, including authentication and user management.
+ *
  * @class WildduckNodeSDK
  */
 export class WildduckNodeSDK {
+  /**
+   * @private
+   * @property {ApiClient} client - An instance of the ApiClient used to communicate with the WildDuck API.
+   */
   private client: ApiClient;
+
+  /**
+   * Provides methods for authentication-related operations, such as login and token invalidation.
+   * @public
+   * @type {Authentication}
+   */
   public authentication: Authentication;
+
+  /**
+   * Provides methods for managing users, including creating, updating, and deleting users,
+   * and advanced operations such as quota recalculation and event streams.
+   * @public
+   * @type {Users}
+   */
   public users: Users;
 
   /**
-   * Creates an instance of the Wildduck-NodeSDK.
-   * 
+   * Creates an instance of the WildduckNodeSDK.
+   *
    * @constructor
-   * @param {string} apiKey - The access token for authenticating API requests.
-   * @param {string} apiUrl - The base URL of the WildDuck API.
+   * @param {string} apiKey - The API key used to authenticate requests to the WildDuck API.
+   * @param {string} apiUrl - The base URL of the WildDuck API (e.g., "https://api.example.com").
+   *
+   * @example
+   * // Initialize the SDK
+   * const sdk = new WildduckNodeSDK("your-api-key", "https://api.example.com");
+   * sdk.users.listUsers().then(users => console.log(users));
    */
   constructor(apiKey: string, apiUrl: string) {
-    // Initialize the underlying ApiClient
+    /**
+     * @private
+     * Initializes the API client with the provided API key and base URL.
+     */
     this.client = new ApiClient(apiKey, apiUrl);
 
     /**
-     * The authentication module for managing authentication-related operations.
-     * Provides methods such as `preAuth`, `authenticate`, and more.
-     *
-     * @type {Authentication}
+     * Initializes the authentication module.
      */
     this.authentication = new Authentication(this.client);
 
     /**
-     * The users module for managing user-related operations.
-     * Provides methods such as `listUsers`, `createUser`, `getUser`, `updateUser`, and more.
-     *
-     * @type {Users}
+     * Initializes the user management module.
      */
     this.users = new Users(this.client);
   }
 }
+

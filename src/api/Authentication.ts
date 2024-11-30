@@ -12,24 +12,32 @@
  * Created on 2024-11-29 :: 11:56 BY joyider <andre(-at-)sess.se>
  */
 
-
 import { ApiClient } from "../utils/ApiClient";
 
 /**
  * A class for handling authentication-related operations in the WildDuck API.
- * Provides methods for pre-authentication, user authentication, token invalidation,
+ * This class provides methods for pre-authentication, user authentication, token invalidation,
  * and retrieving authentication events.
- * 
+ *
  * @class Authentication
  */
 export class Authentication {
+  /**
+   * @private
+   * @property {ApiClient} client - The ApiClient instance used for making API requests.
+   */
   private client: ApiClient;
 
   /**
    * Creates an instance of the Authentication class.
-   * 
+   *
    * @constructor
+   * @private
    * @param {ApiClient} client - An instance of the ApiClient used to communicate with the API.
+   *
+   * @example
+   * // Example instantiation of the Authentication class
+   * const auth = new Authentication(apiClient);
    */
   constructor(client: ApiClient) {
     this.client = client;
@@ -37,21 +45,42 @@ export class Authentication {
 
   /**
    * Checks if a username exists and can be used for authentication.
-   * 
+   *
+   * This method allows you to verify if a username or email address is valid and can be used
+   * for authentication within the specified scope.
+   *
    * @async
    * @function preAuth
    * @param {string} username - The username or email address to check.
-   * @param {string} scope - The required scope (e.g., master, imap, smtp, pop3).
+   * @param {string} scope - The required scope for authentication (e.g., master, imap, smtp, pop3).
    * @param {string} [sess] - Optional session identifier for logging.
    * @param {string} [ip] - Optional IP address for logging.
-   * @returns {Promise<object>} - A promise that resolves to the pre-authentication response.
-   * 
-   * @throws {Error} - If the API request fails or returns an error.
+   * @returns {Promise<object>} A promise that resolves to the pre-authentication response.
+   * @returns {boolean} return.success - Indicates whether the operation was successful.
+   * @returns {string} return.scope - The validated scope for the username.
+   * @returns {string} return.username - The username that was checked.
+   *
+   * @throws {Error} If the API request fails or returns an error.
+   *
+   * @example
+   * // Check if a username is valid for authentication
+   * const response = await auth.preAuth("user@example.com", "imap", "sess123", "192.168.0.1");
+   * console.log(response.success); // true or false
    */
-  async preAuth(username: string, scope: string, sess?: string, ip?: string) {
+  public async preAuth(
+    username: string,
+    scope: string,
+    sess?: string,
+    ip?: string
+  ): Promise<{
+    success: boolean;
+    scope: string;
+    username: string;
+  }> {
     const payload = { username, scope, sess, ip };
     return this.client.post("/preauth", payload);
   }
+
 
    /**
    * Authenticates a user and optionally generates a temporary access token.
@@ -70,7 +99,7 @@ export class Authentication {
    * 
    * @throws {Error} - If the API request fails or returns an error.
    */
-  async authenticate(
+  public  async authenticate(
     username: string,
     password: string,
     scope?: string,
@@ -93,7 +122,7 @@ export class Authentication {
    * 
    * @throws {Error} - If the API request fails or returns an error.
    */
-  async invalidateToken() {
+  public  async invalidateToken() {
     return this.client.delete("/authenticate");
   }
 
