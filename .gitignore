@@ -132,3 +132,5 @@ dist
 
 #Tenforward
 bump_version.sh
+
+.idea/
