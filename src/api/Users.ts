@@ -81,6 +81,8 @@ export class Users {
      * @returns {boolean} return.results[].encryptMessages - Whether received messages are encrypted.
      * @returns {boolean} return.results[].encryptForwarded - Whether forwarded messages are encrypted.
      * @returns {Object} return.results[].quota - Quota usage limits for the user.
+     * @returns {number} return.results[].quota.allowed - Allowed quota in bytes.
+     * @returns {number} return.results[].quota.used - Space used in bytes.
      * @returns {Object} [return.results[].metaData] - Custom metadata value (if `metaData` was `true` in the query).
      * @returns {Object} [return.results[].internalData] - Internal metadata (if `internalData` was `true` and user-role token was not used).
      * @returns {boolean} return.results[].hasPasswordSet - Whether the user has a password set and can authenticate.
@@ -91,16 +93,23 @@ export class Users {
      * @example
      * // Fetch users with a specific tag
      * const users = await users.listUsers({ tags: "admin" });
+     * console.log(users.results); // Array of user objects
      *
      * @example
      * // Fetch the next page of results
      * const users = await users.listUsers({ next: "eyIkb2lkIjoiNWRmMWZkMmQ3NzkyNTExOGI2MDdjNjg0In0" });
+     * console.log(users.nextCursor); // Cursor for the next page
      *
      * @example
      * // Fetch users with metadata included
      * const users = await users.listUsers({ metaData: true });
+     * console.log(users.results[0].metaData); // Metadata for the first user
+     *
+     * @example
+     * // Fetch users with a query string
+     * const users = await users.listUsers({ query: "example" });
+     * console.log(users.results.map(user => user.username)); // List of usernames matching the query
      */
-
     public async listUsers(params?: {
         query?: string;
         forward?: string;
@@ -114,7 +123,33 @@ export class Users {
         page?: number;
         sess?: string;
         ip?: string;
-    }): Promise<any> {
+    }): Promise<{
+        success: boolean;
+        total: number;
+        page: number;
+        previousCursor: string | boolean;
+        nextCursor: string | boolean;
+        query: string;
+        results: Array<{
+            id: string;
+            username: string;
+            name: string;
+            address: string;
+            tags: string[];
+            targets: string[];
+            enabled2fa: string[];
+            autoreply: boolean;
+            encryptMessages: boolean;
+            encryptForwarded: boolean;
+            quota: { allowed: number; used: number };
+            metaData?: object;
+            internalData?: object;
+            hasPasswordSet: boolean;
+            activated: boolean;
+            disabled: boolean;
+            suspended: boolean;
+        }>;
+    }> {
         const query = new URLSearchParams(
             params as Record<string, string>
         ).toString();
