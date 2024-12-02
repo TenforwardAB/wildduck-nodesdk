@@ -1,0 +1,7 @@
+node_modules
+src/
+tests/
+*.log
+tsconfig.json
+typedoc.json
+jest.config.js

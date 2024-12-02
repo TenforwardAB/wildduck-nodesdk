@@ -36,19 +36,44 @@ export class ApiClient {
     }
 
     /**
-     * Makes an HTTP GET request to the specified endpoint.
+     * Makes a GET request to the specified API endpoint.
+     * Supports returning the response in various formats.
      *
      * @async
      * @function get
      * @param {string} endpoint - The API endpoint to call (relative to the base URL).
-     * @param {Record<string, string>} [headers] - Optional additional headers.
-     * @returns {Promise<any>} - A promise that resolves to the response JSON.
+     * @param {Record<string, string>} [headers={}] - Optional additional headers to include in the request.
+     * @param {"json" | "text" | "arraybuffer"} [responseType="json"] - The expected response type.
+     *  - "json" (default): Parses and returns the response as JSON.
+     *  - "text": Returns the response as a plain string.
+     *  - "arraybuffer": Returns the response as a binary ArrayBuffer.
+     * @returns {Promise<any>} A promise resolving to the response data in the specified format.
      *
-     * @throws {Error} - If the HTTP request fails or the response is not successful.
+     * @throws {Error} If the HTTP request fails or the response status is not successful (non-2xx).
+     *
+     * @example
+     * // Fetch JSON data
+     * const data = await apiClient.get("/users");
+     * console.log(data);
+     *
+     * @example
+     * // Fetch plain text data
+     * const text = await apiClient.get("/status", {}, "text");
+     * console.log(text);
+     *
+     * @example
+     * // Fetch binary data
+     * const buffer = await apiClient.get("/download/file", {}, "arraybuffer");
+     * console.log(buffer instanceof ArrayBuffer); // true
      */
-    public async get(endpoint: string, headers: Record<string, string> = {}): Promise<any> {
-        return this.request("GET", endpoint, undefined, headers);
+    public async get(
+        endpoint: string,
+        headers: Record<string, string> = {},
+        responseType: "json" | "text" | "arraybuffer" = "json"
+    ): Promise<any> {
+        return this.request("GET", endpoint, undefined, headers, responseType);
     }
+
 
     /**
      * Makes an HTTP PUT request to the specified endpoint with a JSON payload.
@@ -119,25 +144,41 @@ export class ApiClient {
     }
 
     /**
-     * A private method for making HTTP requests.
-     * Adds the `X-Access-Token` header for authentication.
+     * A private method for making HTTP requests to the API.
+     * This method handles low-level HTTP operations, including adding the `X-Access-Token`
+     * authentication header and parsing the response based on the specified response type.
      *
      * @private
      * @async
      * @function request
-     * @param {string} method - The HTTP method (GET, POST, DELETE).
+     * @param {string} method - The HTTP method to use (e.g., "GET", "POST", "PUT", "DELETE").
      * @param {string} endpoint - The API endpoint to call (relative to the base URL).
-     * @param {any} [body] - The request body for POST requests.
-     * @param {Record<string, string>} [headers] - Optional additional headers.
-     * @returns {Promise<any>} - A promise resolving to the response JSON.
+     * @param {any} [body] - The request body, applicable for POST or PUT requests.
+     * @param {Record<string, string>} [headers={}] - Optional additional headers to include in the request.
+     * @param {"json" | "text" | "arraybuffer"} [responseType="json"] - The expected response type.
+     *  - "json" (default): Parses and returns the response as JSON.
+     *  - "text": Returns the response as a plain string.
+     *  - "arraybuffer": Returns the response as a binary ArrayBuffer.
+     * @returns {Promise<any>} A promise resolving to the response data in the specified format.
      *
-     * @throws {Error} - If the HTTP request fails or the response is not successful.
+     * @throws {Error} If the HTTP request fails or the response status is not successful (non-2xx).
+     *
+     * @example
+     * // Internal method usage
+     * const data = await request("GET", "/users");
+     * console.log(data);
+     *
+     * @example
+     * // Fetch binary data with a POST request
+     * const binaryData = await request("POST", "/upload", fileData, {}, "arraybuffer");
+     * console.log(binaryData instanceof ArrayBuffer); // true
      */
     private async request(
         method: string,
         endpoint: string,
         body?: any,
-        headers: Record<string, string> = {}
+        headers: Record<string, string> = {},
+        responseType: "json" | "text" | "arraybuffer" = "json"
     ): Promise<any> {
         const url = `${this.apiUrl}${endpoint}`;
         const options: RequestInit = {
@@ -155,6 +196,14 @@ export class ApiClient {
             const error = await response.json();
             throw new Error(`HTTP ${response.status}: ${JSON.stringify(error)}`);
         }
-        return response.json();
+
+        switch (responseType) {
+            case "arraybuffer":
+                return response.arrayBuffer();
+            case "text":
+                return response.text();
+            default:
+                return response.json();
+        }
     }
 }
