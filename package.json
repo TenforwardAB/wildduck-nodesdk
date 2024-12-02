@@ -1,6 +1,7 @@
 {
   "name": "wildduck-nodesdk",
   "version": "0.2.0",
+  "license": "EUPL-1.2",
   "description": "A modular client library for interacting with the WildDuck API.",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
