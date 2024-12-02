@@ -304,6 +304,8 @@ export class Users {
      *
      * This method retrieves detailed information about a user by their unique ID, including metadata, limits, and account settings.
      *
+     * @async
+     * @function getUser
      * @param {string} userId - **Required.** The user's unique ID.
      * @param {Object} [params] - Optional query parameters.
      * @param {string} [params.sess] - Session identifier for the logs.
