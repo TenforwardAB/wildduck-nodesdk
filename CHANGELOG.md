@@ -1,3 +1,7 @@
+## 0.2.1 (December 02, 2024)
+  - Correct license in npm package manager
+  - New Version update for NPM
+
 ## 0.2.0 (December 02, 2024)
 
 
