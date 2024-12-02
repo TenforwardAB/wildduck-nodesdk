@@ -1,3 +1,6 @@
+## 0.2.0 (December 02, 2024)
+
+
 ## 0.1.0 (December 02, 2024)
   - Mailbox & Messages added to the sdk, and unit tests, integration tests still needs to be worked on
   - Users API routes availble and unit tests for Users working, extended docstrings for user and Authneticate
