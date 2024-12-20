@@ -1,3 +1,6 @@
+## 0.3.0 (December 20, 2024)
+  - Adding MEssages, mailbox, addresses and submission to the scope
+
 ## 0.2.3 (December 20, 2024)
   - Hotfix for listAddressesFromRegister URLSearchparams
   - ignore files cleanup
