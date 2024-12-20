@@ -377,7 +377,11 @@ export class Addresses {
             address: string;
         }>;
     }> {
-        const query = new URLSearchParams(params as Record<string, string>).toString();
+        const stringParams: Record<string, string> = Object.fromEntries(
+            Object.entries(params).map(([key, value]) => [key, String(value)])
+        );
+
+        const query = new URLSearchParams(stringParams).toString();
         return this.client.get(`/users/${userId}/addressregister${query ? `?${query}` : ""}`);
     }
 
