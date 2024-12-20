@@ -131,6 +131,4 @@ dist
 .pnp.*
 
 #Tenforward
-bump_version.sh
-
 .idea/
