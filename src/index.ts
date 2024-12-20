@@ -14,6 +14,10 @@
 import { ApiClient } from "./utils/ApiClient";
 import { Authentication } from "./api/Authentication";
 import { Users } from "./api/Users";
+import { Addresses } from "./api/Addresses";
+import { Messages } from "./api/Messages";
+import { Mailboxes } from "./api/Mailboxes";
+import { Submission } from "./api/Submission";
 
 /**
  * The main SDK class for interacting with the WildDuck API.
@@ -44,6 +48,36 @@ export class WildduckNodeSDK {
   public users: Users;
 
   /**
+   * Provides methods for managing addresses, including creation, deletion, and updates.
+   * @public
+   * @type {Addresses}
+   */
+  public addresses: Addresses;
+
+  /**
+   * Provides methods for managing mailboxes, including creating, updating, and deleting mailboxes,
+   * and advanced operations such as retrieving mailbox statistics.
+   * @public
+   * @type {Mailboxes}
+   */
+  public mailboxes: Mailboxes;
+
+  /**
+   * Provides methods for managing messages, including sending, receiving, and processing messages,
+   * and advanced operations such as message search and threading.
+   * @public
+   * @type {Messages}
+   */
+  public messages: Messages;
+
+  /**
+   * Provides methods for managing submissions, including tracking and validating submissions.
+   * @public
+   * @type {Submission}
+   */
+  public submission: Submission;
+
+  /**
    * Creates an instance of the WildduckNodeSDK.
    *
    * @constructor
@@ -71,6 +105,26 @@ export class WildduckNodeSDK {
      * Initializes the user management module.
      */
     this.users = new Users(this.client);
+
+    /**
+     * Initializes the address management module.
+     */
+    this.addresses = new Addresses(this.client);
+
+    /**
+     * Initializes the mailbox management module.
+     */
+    this.mailboxes = new Mailboxes(this.client);
+
+    /**
+     * Initializes the message management module.
+     */
+    this.messages = new Messages(this.client);
+
+    /**
+     * Initializes the submission management module.
+     */
+    this.submission = new Submission(this.client);
   }
 }
 
