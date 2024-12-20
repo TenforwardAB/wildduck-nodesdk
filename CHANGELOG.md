@@ -1,3 +1,9 @@
+## 0.2.3 (December 20, 2024)
+  - Hotfix for listAddressesFromRegister URLSearchparams
+  - ignore files cleanup
+  - Addresses and addresses unit tests
+  - Submissions implemented
+
 ## 0.2.2 (December 02, 2024)
 
 
