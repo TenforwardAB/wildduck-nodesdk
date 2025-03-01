@@ -44,98 +44,135 @@ export class Submission {
     this.client = client;
   }
 
-  /**
-   * Submits a message for delivery.
-   *
-   * This method allows sending emails from a user account by providing
-   * necessary message details such as recipients, subject, and content.
-   *
-   * @async
-   * @function submitMessage
-   * @param {string} userId - The ID of the user sending the message.
-   * @param {object} message - The message details.
-   * @param {string} message.mailbox - ID of the mailbox from which the message is sent.
-   * @param {object} message.from - Address for the From header.
-   * @param {string} [message.from.name] - Name of the sender.
-   * @param {string} message.from.address - Email address of the sender.
-   * @param {Array<object>} message.to - List of To recipients.
-   * @param {string} [message.to[].name] - Name of the recipient.
-   * @param {string} message.to[].address - Email address of the recipient.
-   * @param {Array<object>} [message.cc] - List of CC recipients.
-   * @param {Array<object>} [message.bcc] - List of BCC recipients.
-   * @param {string} [message.subject] - Subject of the email.
-   * @param {string} [message.text] - Plaintext version of the email content.
-   * @param {string} [message.html] - HTML version of the email content.
-   * @param {Array<object>} [message.attachments] - List of attachments.
-   * @param {string} [message.sess] - Optional session identifier for logging.
-   * @param {string} [message.ip] - Optional IP address for logging.
-   * @returns {Promise<object>} A promise that resolves to the submitted message details.
-   * @returns {boolean} return.success - Indicates if the submission was successful.
-   * @returns {object} return.message - Details of the submitted message.
-   * @returns {string} return.message.mailbox - Mailbox ID the message was stored to.
-   * @returns {number} return.message.id - Message ID in the mailbox.
-   * @returns {string} return.message.queueId - Queue ID in the MTA.
-   *
-   * @throws {Error} If the API request fails or the response is not successful.
-   *
-   * @example
-   * // Submit a simple email
-   * const response = await submission.submitMessage("user123", {
-   *   mailbox: "mailbox456",
-   *   from: { address: "sender@example.com", name: "Sender Name" },
-   *   to: [{ address: "recipient@example.com", name: "Recipient Name" }],
-   *   subject: "Hello",
-   *   text: "This is a simple text message.",
-   * });
-   * console.log(response.success); // true
-   * console.log(response.message.queueId); // "queue123"
-   *
-   * @example
-   * // Submit an email with attachments
-   * const response = await submission.submitMessage("user123", {
-   *   mailbox: "mailbox456",
-   *   from: { address: "sender@example.com" },
-   *   to: [{ address: "recipient@example.com" }],
-   *   subject: "Email with attachments",
-   *   text: "Please find the attachments below.",
-   *   attachments: [
-   *     {
-   *       filename: "example.txt",
-   *       contentType: "text/plain",
-   *       content: Buffer.from("Hello, world!").toString("base64"),
-   *     },
-   *   ],
-   * });
-   * console.log(response.message.id); // 789
-   */
-  public async submitMessage(
-    userId: string,
-    message: {
-      mailbox: string;
-      from: { name?: string; address: string };
-      to: Array<{ name?: string; address: string }>;
-      cc?: Array<{ name?: string; address: string }>;
-      bcc?: Array<{ name?: string; address: string }>;
-      subject?: string;
-      text?: string;
-      html?: string;
-      attachments?: Array<{
-        filename: string;
-        contentType: string;
-        content: string;
-        cid?: string;
-      }>;
-      sess?: string;
-      ip?: string;
+    /**
+     * Submits an email message for delivery from a user account.
+     *
+     * This method allows sending an email with optional attachments, custom headers, and additional metadata.
+     * It supports direct email delivery or upload-only mode, where the message is stored but not sent.
+     *
+     * @async
+     * @function submitMessage
+     * @param {string} user - The user ID sending the email.
+     * @param {Object} payload - The email details including recipients, subject, and message body.
+     * @param {string} payload.mailbox - The ID of the mailbox from which the email is sent.
+     * @param {Object} payload.from - Sender's email address.
+     * @param {string} payload.from.name - Sender's display name.
+     * @param {string} payload.from.address - Sender's email address.
+     * @param {Object[]} payload.to - Array of recipient email addresses.
+     * @param {string} payload.to[].name - Recipient's name.
+     * @param {string} payload.to[].address - Recipient's email address.
+     * @param {Object[]} [payload.cc] - Array of CC email addresses.
+     * @param {Object[]} [payload.bcc] - Array of BCC email addresses.
+     * @param {Object[]} [payload.headers] - Custom email headers.
+     * @param {string} payload.headers[].key - Header key.
+     * @param {string} payload.headers[].value - Header value.
+     * @param {string} payload.subject - Email subject.
+     * @param {string} payload.text - Plaintext email content.
+     * @param {string} [payload.html] - HTML formatted email content.
+     * @param {Object[]} [payload.attachments] - Array of attachments.
+     * @param {string} payload.attachments[].filename - Attachment filename.
+     * @param {string} payload.attachments[].contentType - MIME type of the attachment.
+     * @param {string} payload.attachments[].content - Base64 encoded attachment content.
+     * @param {Object} [payload.meta] - Optional metadata for the email.
+     * @param {string} [payload.sess] - Session identifier for logging.
+     * @param {string} [payload.ip] - IP address for logging.
+     * @param {boolean} [payload.uploadOnly] - If true, the message is stored but not sent.
+     *
+     * @returns {Promise<Object>} A promise that resolves to the submission response.
+     * @returns {boolean} return.success - Indicates whether the operation was successful.
+     * @returns {Object} return.message - Information about the submitted message.
+     * @returns {string} return.message.mailbox - The mailbox ID where the message was stored.
+     * @returns {number} return.message.id - The message ID in the mailbox.
+     * @returns {string} return.message.queueId - The queue ID in the mail transport agent (MTA).
+     *
+     * @throws {Error} If the API request fails or returns an error.
+     *
+     * @example
+     * // Submit a plain text email
+     * const response = await submissions.submitMessage("507f1f77bcf86cd799439011", {
+     *   mailbox: "mailbox123",
+     *   from: { name: "John Doe", address: "john@example.com" },
+     *   to: [{ name: "Jane Doe", address: "jane@example.com" }],
+     *   subject: "Hello from WildDuck",
+     *   text: "This is a test email.",
+     * });
+     * console.log(response.success); // true
+     *
+     * @example
+     * // Submit an email with an attachment
+     * const response = await submissions.submitMessage("507f1f77bcf86cd799439011", {
+     *   mailbox: "mailbox123",
+     *   from: { name: "John Doe", address: "john@example.com" },
+     *   to: [{ name: "Jane Doe", address: "jane@example.com" }],
+     *   subject: "Invoice",
+     *   text: "Please find attached the invoice.",
+     *   attachments: [{
+     *     filename: "invoice.pdf",
+     *     contentType: "application/pdf",
+     *     content: "JVBERi0xLjQKJ... (Base64 encoded content)"
+     *   }]
+     * });
+     * console.log(response.message.queueId); // Queue ID in MTA
+     *
+     * @example
+     * // Upload a message without sending it
+     * const response = await submissions.submitMessage("507f1f77bcf86cd799439011", {
+     *   mailbox: "mailbox123",
+     *   from: { name: "John Doe", address: "john@example.com" },
+     *   to: [{ name: "Jane Doe", address: "jane@example.com" }],
+     *   subject: "Draft Email",
+     *   text: "This is a draft email.",
+     *   uploadOnly: true
+     * });
+     * console.log(response.message.id); // Message ID in mailbox
+     */
+    public async submitMessage(
+        user: string,
+        payload: {
+            mailbox: string;
+            from: { name: string; address: string };
+            replyTo?: { name: string; address: string };
+            to: { name: string; address: string }[];
+            cc?: { name: string; address: string }[];
+            bcc?: { name: string; address: string }[];
+            headers?: { key: string; value: string }[];
+            subject: string;
+            text: string;
+            html?: string;
+            attachments?: {
+                filename: string;
+                contentType: string;
+                encoding?: string;
+                contentTransferEncoding?: string;
+                contentDisposition?: "inline" | "attachment";
+                content: string;
+                cid?: string;
+            }[];
+            meta?: Record<string, any>;
+            sess?: string;
+            ip?: string;
+            reference?: {
+                mailbox: string;
+                id: number;
+                action: "reply" | "replyAll" | "forward";
+            };
+            isDraft?: boolean;
+            draft?: { mailbox: string; id: number };
+            sendTime?: string;
+            uploadOnly?: boolean;
+            envelope?: {
+                from: { name?: string; address: string };
+                to: { name?: string; address: string }[];
+            };
+        }
+    ): Promise<{
+        success: boolean;
+        message: {
+            mailbox: string;
+            id: number;
+            queueId: string;
+        };
+    }> {
+        return this.client.post(`/users/${user}/submit`, payload);
     }
-  ): Promise<{
-    success: boolean;
-    message: {
-      mailbox: string;
-      id: number;
-      queueId: string;
-    };
-  }> {
-    return this.client.post(`/users/${userId}/submit`, message);
-  }
 }

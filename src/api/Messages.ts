@@ -531,7 +531,7 @@ export class Messages {
      * // Retrieve information about a specific message
      * const messageInfo = await messages.getMessageInfo(
      *   "507f1f77bcf86cd799439011",
-     *   "inbox",
+     *   "78EB835A-5C9C-4D6E-9F77-DF1A9875407B@icloud.com",
      *   12345,
      *   { markAsSeen: true }
      * );
@@ -540,7 +540,7 @@ export class Messages {
     public async getMessageInfo(
         userId: string,
         mailboxId: string,
-        messageId: number,
+        messageId: string,
         params?: {
             replaceCidLinks?: boolean;
             markAsSeen?: boolean;
