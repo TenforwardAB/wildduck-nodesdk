@@ -1,3 +1,6 @@
+## 0.3.2 (March 01, 2025)
+  - Adding more objects to payload (and renaming message to payload)
+
 ## 0.3.1 (December 20, 2024)
 
 
