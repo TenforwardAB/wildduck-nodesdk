@@ -19,6 +19,7 @@ import { Messages } from "./api/Messages";
 import { Mailboxes } from "./api/Mailboxes";
 import { Submission } from "./api/Submission";
 import { Filters } from "./api/Filters";
+import { Autoreplies } from "./api/Autoreplies";
 
 /**
  * The main SDK class for interacting with the WildDuck API.
@@ -86,6 +87,13 @@ export class WildduckNodeSDK {
   public filters: Filters;
 
   /**
+   * Provides methods for managing Autoreplies
+   * @public
+   * @type {Autoreplies}
+   */
+  public autoreplies: Autoreplies;
+
+  /**
    * Creates an instance of the WildduckNodeSDK.
    *
    * @constructor
@@ -138,6 +146,11 @@ export class WildduckNodeSDK {
      * Initializes the filters management module.
      */
     this.filters = new Filters(this.client);
+
+    /**
+     * Initializes the Autereplies management module.
+     */
+    this.autoreplies = new Autoreplies(this.client);
   }
 }
 
