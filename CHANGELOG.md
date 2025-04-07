@@ -1,3 +1,6 @@
+## 0.3.6 (April 07, 2025)
+  - Issue-1 fixed with correct type string-->number Docs updated
+
 ## 0.3.5 (April 07, 2025)
   - Add Autoreplies APIs
   - Adding Filter API for wildduck
