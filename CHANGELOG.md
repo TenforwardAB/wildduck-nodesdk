@@ -1,3 +1,6 @@
+## 0.3.7 (April 07, 2025)
+
+
 ## 0.3.6 (April 07, 2025)
   - Issue-1 fixed with correct type string-->number Docs updated
 
