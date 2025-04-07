@@ -540,7 +540,7 @@ export class Messages {
     public async getMessageInfo(
         userId: string,
         mailboxId: string,
-        messageId: string,
+        messageId: number,
         params?: {
             replaceCidLinks?: boolean;
             markAsSeen?: boolean;
