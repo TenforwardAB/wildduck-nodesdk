@@ -18,6 +18,7 @@ import { Addresses } from "./api/Addresses";
 import { Messages } from "./api/Messages";
 import { Mailboxes } from "./api/Mailboxes";
 import { Submission } from "./api/Submission";
+import { Filters } from "./api/Filters";
 
 /**
  * The main SDK class for interacting with the WildDuck API.
@@ -78,6 +79,13 @@ export class WildduckNodeSDK {
   public submission: Submission;
 
   /**
+   * Provides methods for managing filters, listing, adding/deleting and changing
+   * @public
+   * @type {Filters}
+   */
+  public filters: Filters;
+
+  /**
    * Creates an instance of the WildduckNodeSDK.
    *
    * @constructor
@@ -125,6 +133,11 @@ export class WildduckNodeSDK {
      * Initializes the submission management module.
      */
     this.submission = new Submission(this.client);
+
+    /**
+     * Initializes the filters management module.
+     */
+    this.filters = new Filters(this.client);
   }
 }
 

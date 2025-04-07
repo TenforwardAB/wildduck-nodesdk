@@ -610,6 +610,22 @@ export class Addresses {
      * console.log(result.success); // true
      * console.log(result.modifiedAddresses); // Number of addresses modified
      */
+    public async renameDomainInAddresses(
+        payload: {
+            oldDomain: string;
+            newDomain: string;
+            sess?: string;
+            ip?: string;
+        }
+    ): Promise<{
+        success: boolean;
+        modifiedAddresses: number;
+        modifiedUsers: number;
+        modifiedDkim: number;
+        modifiedAliases: number;
+    }> {
+        return this.client.put("/addresses/renameDomain", payload);
+    }
 
     /**
      * Resolves detailed information for a given address.
