@@ -1,3 +1,7 @@
+## 0.3.5 (April 07, 2025)
+  - Add Autoreplies APIs
+  - Adding Filter API for wildduck
+
 ## 0.3.3 (March 01, 2025)
 
 
