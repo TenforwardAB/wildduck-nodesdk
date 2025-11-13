@@ -362,7 +362,7 @@ export class Filters {
             mailbox?: string;
             targets?: string[];
         };
-        disabled: boolean;
+        disabled?: boolean;
         metaData: any;
     }> {
         const queryParams = params
